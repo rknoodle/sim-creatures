@@ -7,6 +7,7 @@ var _dragging: bool = false
 var _drag_offset: Vector2 = Vector2.ZERO
 
 var _header_name: Label
+var _species_label: Label
 var _header_gender: Label
 var _state_label: Label
 var _age_label: Label
@@ -152,6 +153,12 @@ func _build_identity_section() -> VBoxContainer:
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 3)
 	vbox.add_child(_make_section_label("IDENTIDAD"))
+	
+	_species_label = Label.new()
+	_species_label.text = "—"
+	_species_label.add_theme_font_size_override("font_size", 10)
+	_species_label.add_theme_color_override("font_color", Color(0.60, 0.65, 0.75))
+	vbox.add_child(_species_label)
 
 	_age_label = Label.new()
 	_age_label.text = "Edad: —"
@@ -328,6 +335,8 @@ func _refresh() -> void:
 	var id: IdentityData    = _selected_agent.identity
 
 	_header_name.text = id.creature_name
+	if not _species_label == null:
+		_species_label.text = _selected_agent.identity.species
 	_header_gender.text = "♂" if id.gender == IdentityData.Gender.MALE else "♀"
 	_header_gender.add_theme_color_override("font_color",
 		Color(0.45, 0.65, 1.0) if id.gender == IdentityData.Gender.MALE

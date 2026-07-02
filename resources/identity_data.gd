@@ -1,12 +1,35 @@
 # identity_data.gd
-# Resource que almacena la identidad estática del agente: nombre y sexo.
+# Resource de identidad completo. Centraliza todos los datos estáticos del agente.
 class_name IdentityData
 extends Resource
 
 enum Gender { MALE, FEMALE }
 
+# ─── Apariencia ───────────────────────────────────────────────────────────────
+@export_group("Apariencia")
+@export var sprite_texture: Texture2D = null
+@export var body_scale: float = 1.0
+@export_range(0.5, 3.0, 0.05) var body_scale_range: float = 1.0
+
+# ─── Identidad ────────────────────────────────────────────────────────────────
+@export_group("Identidad")
 @export var creature_name: String = ""
 @export var gender: Gender = Gender.MALE
+@export var species: String = "Human"
+
+# ─── Edad ─────────────────────────────────────────────────────────────────────
+@export_group("Edad")
+## Edad inicial en segundos al instanciar el agente.
+@export var start_age: float = 0.0
+## Segundos hasta alcanzar la madurez (AgeStage.ADULT).
+@export var age_to_adult: float = 60.0
+
+# ─── Comportamiento ───────────────────────────────────────────────────────────
+@export_group("Comportamiento")
+## Multiplicador de velocidad durante el cortejo (solo el perseguidor).
+@export var courtship_pursue_speed_multiplier: float = 1.6
+
+# ─── Generación de nombre aleatorio ──────────────────────────────────────────
 
 const NAME_PREFIXES: PackedStringArray = [
 	"Bora", "Glim", "Nox", "Vel", "Thar", "Omi", "Zek", "Aer",
@@ -30,4 +53,4 @@ func gender_label() -> String:
 
 
 func display() -> String:
-	return "%s [%s]" % [creature_name, gender_label()]
+	return "%s [%s] (%s)" % [creature_name, gender_label(), species]

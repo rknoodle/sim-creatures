@@ -31,13 +31,8 @@ enum AgeStage { JUVENILE, ADULT }
 @export var brain: BrainWeights
 @export var identity: IdentityData
 
-@export var age_to_adult: float = 60.0  # segundos hasta madurez
 @export var start_age: float = 0.0
 
-@export var sprite_texture: Texture2D
-@export_range(0.5, 2.0, 0.05) var body_scale: float = 1.0
-
-@export var courtship_pursue_speed_multiplier: float = 1.6
 
 
 
@@ -87,10 +82,10 @@ func _ready() -> void:
 	_memory_node.initialize_for(_agent_ref())
 	_romance_node.initialize(_memory_node)
 	_sensor.initialize(_memory_node, _romance_node)
-	if sprite_texture != null:
-		_sprite.texture = sprite_texture
-	if not is_equal_approx(body_scale, 1.0):
-		_apply_body_scale()
+	#if sprite_texture != null:
+		#_sprite.texture = sprite_texture
+	#if not is_equal_approx(body_scale, 1.0):
+		#_apply_body_scale()
 
 	_connect_signals()
 	_wander.start(global_position)
@@ -130,12 +125,11 @@ func _tick_age(delta: float) -> void:
 	if _age_stage == AgeStage.ADULT:
 		return
 	_age_timer += delta
-	if _age_timer >= age_to_adult:
+	if _age_timer >= identity.age_to_adult:
 		_age_stage = AgeStage.ADULT
 		chemical_profile.set_libido_active(true)
 		became_adult.emit()
 		print("[Agente] %s alcanzó la madurez." % identity.creature_name)
-
 
 # --- Identidad ---
 
@@ -145,6 +139,20 @@ func _setup_identity() -> void:
 	if identity.creature_name == "":
 		identity.generate_random()
 
+	# Aplicar sprite desde identity
+	if identity.sprite_texture != null and _sprite != null:
+		_sprite.texture = identity.sprite_texture
+
+	# Aplicar escala desde identity
+	if not is_equal_approx(identity.body_scale, 1.0):
+		_apply_body_scale()
+
+	# Aplicar edad inicial
+	if identity.start_age > 0.0:
+		_age_timer = identity.start_age
+		if _age_timer >= identity.age_to_adult:
+			_age_stage = AgeStage.ADULT
+			chemical_profile.set_libido_active(true)
 
 # --- Movimiento ---
 
@@ -417,16 +425,11 @@ func _apply_socializing_movement() -> void:
 	_nav_agent.set_velocity(dir * move_speed)
 
 func _apply_body_scale() -> void:
-	scale = Vector2(body_scale, body_scale)
-
-	# El radio de detección social también crece con el tamaño,
-	# para que criaturas grandes "sientan" antes a otras
+	scale = Vector2(identity.body_scale, identity.body_scale)
 	if _sensor != null:
-		_sensor.detection_radius *= body_scale
-
+		_sensor.detection_radius *= identity.body_scale
 	if _selection != null:
-		_selection.indicator_radius *= body_scale
-		
+		_selection.indicator_radius *= identity.body_scale
 
 func _check_survival_interruption() -> void:
 	if _state == AgentState.INTERACTING:
@@ -485,7 +488,8 @@ func _apply_courting_movement() -> void:
 
 	var next_pos: Vector2 = _nav_agent.get_next_path_position()
 	var dir: Vector2 = (next_pos - global_position).normalized()
-	_nav_agent.set_velocity(dir * move_speed * courtship_pursue_speed_multiplier)
+	_nav_agent.set_velocity(dir * move_speed * identity.courtship_pursue_speed_multiplier)
+
 
 func _on_courtship_target_chosen(target: BaseAgent) -> void:
 	# Si ya estamos cortejando a este mismo objetivo, no interrumpir ni resetear roles
