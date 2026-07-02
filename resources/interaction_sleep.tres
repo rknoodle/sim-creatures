@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InteractionDefinition" format=3 uid="uid://danc0tr6j5rh3"]
+
+[ext_resource type="Script" uid="uid://c3ygqinw5t0kf" path="res://resources/interaction_definition.gd" id="1_a1b0q"]
+
+[resource]
+script = ExtResource("1_a1b0q")
+interaction_name = &"sleep"
+duration_seconds = 5.0
+fatigue_change = -70.0
+loneliness_change = 5.0
+metadata/_custom_type_script = "uid://c3ygqinw5t0kf"

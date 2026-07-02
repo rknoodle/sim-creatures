@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://dvcwaanl2t03p"]
+
+[ext_resource type="Script" uid="uid://dnk15niif7kiv" path="res://main_world.gd" id="1_aac4l"]
+[ext_resource type="Script" uid="uid://dcheq3gfoc83b" path="res://world/free_camera.gd" id="2_o7wth"]
+[ext_resource type="PackedScene" uid="uid://bbiml8m864f21" path="res://base_agent_template.tscn" id="3_wly0c"]
+[ext_resource type="Resource" uid="uid://beujytrtjraqr" path="res://_resources/agent_01_profile.tres" id="4_ffw8n"]
+[ext_resource type="Resource" uid="uid://ctoo0ht43sd2e" path="res://_resources/agent_01_brain.tres" id="4_xftef"]
+[ext_resource type="Script" uid="uid://bhi3un8cave3" path="res://resources/identity_data.gd" id="6_72mcj"]
+[ext_resource type="Texture2D" uid="uid://bddxkbr4d3ncl" path="res://_sprites/kri.png" id="6_fc1ei"]
+[ext_resource type="Resource" uid="uid://evnao0818irw" path="res://_resources/agent_02_identity.tres" id="7_bqrff"]
+[ext_resource type="Texture2D" uid="uid://bf8jnrku54tdd" path="res://_sprites/noe.png" id="9_vo8r4"]
+[ext_resource type="Resource" uid="uid://3j5kq8sv6vsi" path="res://resources/interaction_food.tres" id="10_8i6ae"]
+[ext_resource type="Script" uid="uid://daa1hjaexumy4" path="res://objects/smart_object.gd" id="10_v7yd6"]
+[ext_resource type="Resource" uid="uid://danc0tr6j5rh3" path="res://resources/interaction_sleep.tres" id="11_v7yd6"]
+[ext_resource type="Texture2D" uid="uid://23sxaa02jq3c" path="res://_sprites/bread.png" id="11_wly0c"]
+[ext_resource type="Texture2D" uid="uid://1qg8lvnd13pd" path="res://_sprites/bed.png" id="13_xftef"]
+[ext_resource type="Resource" uid="uid://dm0vbxkwqlpdo" path="res://_resources/agent_02_profile.tres" id="15_e6qru"]
+[ext_resource type="Script" uid="uid://bauvd4uao6l4p" path="res://ui/event_log_anchor.gd" id="20_72mcj"]
+[ext_resource type="Script" uid="uid://cspcl6vu6ccud" path="res://ui/pause_menu.gd" id="20_o7wth"]
+[ext_resource type="Script" uid="uid://bsv8l6gdrxk8r" path="res://ui/event_log_panel.gd" id="21_ffw8n"]
+[ext_resource type="Script" uid="uid://d1cadf5piryju" path="res://ui/creature_inspector.gd" id="25_u13kq"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_7ktct"]
+vertices = PackedVector2Array(549.0703, 298.9375, -557.8828, 293.04688, -551.1094, -303.02344, 553.90625, -305.96875)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-561, -313, -568, 303, 559, 309, 564, -316)])
+
+[sub_resource type="Resource" id="Resource_ju1fa"]
+script = ExtResource("6_72mcj")
+creature_name = "Kri"
+metadata/_custom_type_script = "uid://bhi3un8cave3"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wly0c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xftef"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o7wth"]
+size = Vector2(1280, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_72mcj"]
+size = Vector2(20, 720)
+
+[node name="World" type="Node2D" unique_id=812486369]
+script = ExtResource("1_aac4l")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1431786830]
+visible = false
+script = ExtResource("2_o7wth")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=2058041844]
+navigation_polygon = SubResource("NavigationPolygon_7ktct")
+
+[node name="BaseAgentM" parent="." unique_id=1240682767 instance=ExtResource("3_wly0c")]
+position = Vector2(0, -72)
+chemical_profile = ExtResource("4_ffw8n")
+brain = ExtResource("4_xftef")
+identity = SubResource("Resource_ju1fa")
+sprite_texture = ExtResource("6_fc1ei")
+body_scale = 0.9
+
+[node name="BaseAgentF" parent="." unique_id=1820749990 instance=ExtResource("3_wly0c")]
+position = Vector2(0, 55)
+chemical_profile = ExtResource("15_e6qru")
+identity = ExtResource("7_bqrff")
+sprite_texture = ExtResource("9_vo8r4")
+body_scale = 1.5
+
+[node name="FoodBowl" type="Area2D" parent="." unique_id=646966515]
+position = Vector2(-322, 67)
+scale = Vector2(2, 2)
+script = ExtResource("10_v7yd6")
+interaction = ExtResource("10_8i6ae")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FoodBowl" unique_id=610562160]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_wly0c")
+
+[node name="Sprite2D" type="Sprite2D" parent="FoodBowl" unique_id=230855049]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("11_wly0c")
+
+[node name="Bed" type="Area2D" parent="." unique_id=56306023]
+position = Vector2(-322, -77)
+script = ExtResource("10_v7yd6")
+interaction = ExtResource("11_v7yd6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed" unique_id=1020173885]
+scale = Vector2(7, 7)
+shape = SubResource("RectangleShape2D_xftef")
+
+[node name="Sprite2D" type="Sprite2D" parent="Bed" unique_id=963699472]
+texture = ExtResource("13_xftef")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=287582657]
+
+[node name="CreatureInspector" type="PanelContainer" parent="UI" unique_id=583895034]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("25_u13kq")
+
+[node name="EventLogAnchor" type="MarginContainer" parent="UI" unique_id=148882601]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("20_72mcj")
+
+[node name="EventLogPanel" type="PanelContainer" parent="UI/EventLogAnchor" unique_id=1422850214]
+layout_mode = 2
+script = ExtResource("21_ffw8n")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="UI" unique_id=342268640]
+script = ExtResource("20_o7wth")
+
+[node name="Boundary" type="StaticBody2D" parent="." unique_id=732425539]
+
+[node name="WallTop" type="CollisionShape2D" parent="Boundary" unique_id=1700853744]
+position = Vector2(0, -350)
+shape = SubResource("RectangleShape2D_o7wth")
+
+[node name="WallBottom" type="CollisionShape2D" parent="Boundary" unique_id=12740497]
+position = Vector2(0, 350)
+shape = SubResource("RectangleShape2D_o7wth")
+
+[node name="WallLeft" type="CollisionShape2D" parent="Boundary" unique_id=1252641943]
+position = Vector2(-650, 0)
+shape = SubResource("RectangleShape2D_72mcj")
+
+[node name="WallRight" type="CollisionShape2D" parent="Boundary" unique_id=1835714092]
+position = Vector2(650, 0)
+shape = SubResource("RectangleShape2D_72mcj")

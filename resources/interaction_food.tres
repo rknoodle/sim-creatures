@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InteractionDefinition" format=3 uid="uid://3j5kq8sv6vsi"]
+
+[ext_resource type="Script" uid="uid://c3ygqinw5t0kf" path="res://resources/interaction_definition.gd" id="1_m4jer"]
+
+[resource]
+script = ExtResource("1_m4jer")
+interaction_name = &"eat"
+duration_seconds = 3.0
+hunger_change = -60.0
+fatigue_change = 5.0
+metadata/_custom_type_script = "uid://c3ygqinw5t0kf"

@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://bbiml8m864f21"]
+
+[ext_resource type="Script" uid="uid://gljrhhf2nm0l" path="res://agents/base_agent.gd" id="1_6gmuy"]
+[ext_resource type="Script" uid="uid://c42xufx0hapgy" path="res://resources/chemical_profile.gd" id="2_6gmuy"]
+[ext_resource type="Script" uid="uid://b737m3esabewe" path="res://resources/brain_weights.gd" id="3_ppglw"]
+[ext_resource type="Script" uid="uid://bhi3un8cave3" path="res://resources/identity_data.gd" id="4_4ek4i"]
+[ext_resource type="Texture2D" uid="uid://3qubsdvrs4uc" path="res://icon.svg" id="5_3gej5"]
+[ext_resource type="Script" uid="uid://bwgd5r4uf1vj0" path="res://components/wander_controller.gd" id="6_1bklb"]
+[ext_resource type="Script" uid="uid://drvfr1iywcbma" path="res://components/chemical_monitor.gd" id="7_u2qu4"]
+[ext_resource type="Script" uid="uid://doipksnii5j2w" path="res://resources/action_selector.gd" id="8_ybfcj"]
+[ext_resource type="Script" uid="uid://cjofuiwulkvkt" path="res://resources/reinforcement_system.gd" id="9_5rt4m"]
+[ext_resource type="Script" uid="uid://bu0iwjt3cy2li" path="res://agents/romance_controller.gd" id="10_gbsup"]
+[ext_resource type="Script" uid="uid://cjg6wmohd3i66" path="res://agents/social_memory.gd" id="11_praqx"]
+[ext_resource type="Script" uid="uid://b4gbjr2sisbbf" path="res://agents/companion_controller.gd" id="12_pmfbi"]
+[ext_resource type="Script" uid="uid://1i3d5wvnyrn8" path="res://agents/social_sensor.gd" id="13_m14dg"]
+[ext_resource type="Script" uid="uid://cfs5dpk5adw03" path="res://agents/selection_component.gd" id="14_5uajj"]
+[ext_resource type="Script" uid="uid://b6nr1jye8wqo6" path="res://agents/agent_particles.gd" id="15_ppglw"]
+[ext_resource type="Script" uid="uid://wtk4ojgb4s2m" path="res://resources/particle_config.gd" id="16_lsnse"]
+
+[sub_resource type="Resource" id="Resource_lsnse"]
+script = ExtResource("2_6gmuy")
+metadata/_custom_type_script = "uid://c42xufx0hapgy"
+
+[sub_resource type="Resource" id="Resource_4ek4i"]
+script = ExtResource("3_ppglw")
+metadata/_custom_type_script = "uid://b737m3esabewe"
+
+[sub_resource type="Resource" id="Resource_3gej5"]
+script = ExtResource("4_4ek4i")
+metadata/_custom_type_script = "uid://bhi3un8cave3"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vqk0m"]
+
+[sub_resource type="Resource" id="Resource_1bklb"]
+script = ExtResource("16_lsnse")
+emoji_text = "🍖"
+metadata/_custom_type_script = "uid://wtk4ojgb4s2m"
+
+[sub_resource type="Resource" id="Resource_u2qu4"]
+script = ExtResource("16_lsnse")
+emoji_text = "💤"
+metadata/_custom_type_script = "uid://wtk4ojgb4s2m"
+
+[sub_resource type="Resource" id="Resource_ybfcj"]
+script = ExtResource("16_lsnse")
+emoji_text = "💞"
+metadata/_custom_type_script = "uid://wtk4ojgb4s2m"
+
+[sub_resource type="Resource" id="Resource_5rt4m"]
+script = ExtResource("16_lsnse")
+emoji_text = "💖"
+metadata/_custom_type_script = "uid://wtk4ojgb4s2m"
+
+[sub_resource type="Resource" id="Resource_gbsup"]
+script = ExtResource("16_lsnse")
+emoji_text = "💬"
+metadata/_custom_type_script = "uid://wtk4ojgb4s2m"
+
+[node name="BaseAgent" type="CharacterBody2D" unique_id=1240682767]
+script = ExtResource("1_6gmuy")
+move_speed = 50.0
+chemical_profile = SubResource("Resource_lsnse")
+brain = SubResource("Resource_4ek4i")
+identity = SubResource("Resource_3gej5")
+start_age = 60.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=977562088]
+visibility_layer = 2
+scale = Vector2(0.7, 0.7)
+shape = SubResource("CircleShape2D_vqk0m")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=710542496]
+z_index = 10
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_3gej5")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=2015574528]
+path_desired_distance = 8.0
+target_desired_distance = 16.0
+avoidance_enabled = true
+radius = 12.0
+
+[node name="WanderController" type="Node" parent="." unique_id=86015194]
+script = ExtResource("6_1bklb")
+
+[node name="ChemicalMonitor" type="Node" parent="." unique_id=750918541]
+script = ExtResource("7_u2qu4")
+
+[node name="ActionSelector" type="Node" parent="." unique_id=1611356847]
+script = ExtResource("8_ybfcj")
+
+[node name="ReinforcementSystem" type="Node" parent="." unique_id=1365120449]
+script = ExtResource("9_5rt4m")
+
+[node name="RomanceController" type="Node" parent="." unique_id=448283404]
+script = ExtResource("10_gbsup")
+courtship_duration = 2.0
+bonding_radius = 70.0
+
+[node name="SocialMemory" type="Node" parent="." unique_id=97926581]
+script = ExtResource("11_praqx")
+
+[node name="CompanionController" type="Node" parent="." unique_id=808572608]
+script = ExtResource("12_pmfbi")
+
+[node name="SocialSensor" type="Area2D" parent="." unique_id=1245320420]
+collision_mask = 2
+script = ExtResource("13_m14dg")
+detection_radius = 300.0
+
+[node name="SelectionComponent" type="Area2D" parent="." unique_id=681893156]
+script = ExtResource("14_5uajj")
+
+[node name="AgentParticles" type="Node2D" parent="." unique_id=538622231]
+z_index = 20
+script = ExtResource("15_ppglw")
+config_eat = SubResource("Resource_1bklb")
+config_sleep = SubResource("Resource_u2qu4")
+config_mating = SubResource("Resource_ybfcj")
+config_courtship = SubResource("Resource_5rt4m")
+config_socialize = SubResource("Resource_gbsup")
