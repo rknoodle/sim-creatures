@@ -73,10 +73,10 @@ func _handle_mouse_button(event: InputEventMouseButton) -> void:
 
 		MOUSE_BUTTON_WHEEL_UP:
 			if event.pressed:
-				_apply_zoom(-zoom_step)
+				_apply_zoom(zoom_step)    # ← antes era -zoom_step
 		MOUSE_BUTTON_WHEEL_DOWN:
 			if event.pressed:
-				_apply_zoom(zoom_step)
+				_apply_zoom(-zoom_step)   # ← antes era +zoom_step
 
 
 func _handle_mouse_motion(event: InputEventMouseMotion) -> void:
