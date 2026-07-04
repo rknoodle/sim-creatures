@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dnk15niif7kiv" path="res://main_world.gd" id="1_aac4l"]
 [ext_resource type="Script" uid="uid://dcheq3gfoc83b" path="res://world/free_camera.gd" id="2_o7wth"]
+[ext_resource type="Texture2D" uid="uid://dg4rv8xnl848r" path="res://_sprites/grass_bg.jpg" id="3_ffw8n"]
 [ext_resource type="PackedScene" uid="uid://bbiml8m864f21" path="res://base_agent_template.tscn" id="3_wly0c"]
 [ext_resource type="Resource" uid="uid://beujytrtjraqr" path="res://_resources/agent_01_profile.tres" id="4_ffw8n"]
 [ext_resource type="Resource" uid="uid://ctoo0ht43sd2e" path="res://_resources/agent_01_brain.tres" id="4_xftef"]
@@ -14,7 +15,10 @@
 [ext_resource type="Texture2D" uid="uid://23sxaa02jq3c" path="res://_sprites/bread.png" id="11_wly0c"]
 [ext_resource type="Texture2D" uid="uid://1qg8lvnd13pd" path="res://_sprites/bed.png" id="13_xftef"]
 [ext_resource type="Resource" uid="uid://dm0vbxkwqlpdo" path="res://_resources/agent_02_profile.tres" id="15_e6qru"]
+[ext_resource type="Script" uid="uid://cjbae1hgn2yh4" path="res://ui/zoom_indicator.gd" id="19_o7wth"]
+[ext_resource type="Script" uid="uid://blwdwbu77d6b4" path="res://world/boundary.gd" id="19_vo8r4"]
 [ext_resource type="Script" uid="uid://bauvd4uao6l4p" path="res://ui/event_log_anchor.gd" id="20_72mcj"]
+[ext_resource type="Script" uid="uid://cuihmlb2sf4fo" path="res://ui/spawn_panel.gd" id="20_ffw8n"]
 [ext_resource type="Script" uid="uid://cspcl6vu6ccud" path="res://ui/pause_menu.gd" id="20_o7wth"]
 [ext_resource type="Script" uid="uid://bsv8l6gdrxk8r" path="res://ui/event_log_panel.gd" id="21_ffw8n"]
 [ext_resource type="Script" uid="uid://d1cadf5piryju" path="res://ui/creature_inspector.gd" id="25_u13kq"]
@@ -47,14 +51,17 @@ metadata/_custom_type_script = "uid://bhi3un8cave3"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xftef"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_o7wth"]
-size = Vector2(1280, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_72mcj"]
-size = Vector2(20, 720)
-
 [node name="World" type="Node2D" unique_id=812486369]
 script = ExtResource("1_aac4l")
+
+[node name="Boundary" type="Node2D" parent="." unique_id=546139413]
+position = Vector2(-552, -306)
+script = ExtResource("19_vo8r4")
+floor_texture = ExtResource("3_ffw8n")
+
+[node name="FloorSprite" type="Sprite2D" parent="Boundary" unique_id=222886745]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Boundary" unique_id=721590170]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1431786830]
 visible = false
@@ -116,23 +123,33 @@ script = ExtResource("20_72mcj")
 layout_mode = 2
 script = ExtResource("21_ffw8n")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="UI" unique_id=342268640]
+[node name="HUD" type="CanvasLayer" parent="UI" unique_id=497372348]
+layer = 5
+
+[node name="ZoomIndicator" type="Label" parent="UI/HUD" unique_id=958574913]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("19_o7wth")
+
+[node name="SpawnAnchor" type="MarginContainer" parent="UI/HUD" unique_id=1044409629]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="SpawnPanel" type="PanelContainer" parent="UI/HUD/SpawnAnchor" unique_id=9634287]
+layout_mode = 2
+script = ExtResource("20_ffw8n")
+agent_scene = ExtResource("3_wly0c")
+
+[node name="PauseMenu" type="CanvasLayer" parent="UI" unique_id=342268640]
 script = ExtResource("20_o7wth")
-
-[node name="Boundary" type="StaticBody2D" parent="." unique_id=732425539]
-
-[node name="WallTop" type="CollisionShape2D" parent="Boundary" unique_id=1700853744]
-position = Vector2(0, -350)
-shape = SubResource("RectangleShape2D_o7wth")
-
-[node name="WallBottom" type="CollisionShape2D" parent="Boundary" unique_id=12740497]
-position = Vector2(0, 350)
-shape = SubResource("RectangleShape2D_o7wth")
-
-[node name="WallLeft" type="CollisionShape2D" parent="Boundary" unique_id=1252641943]
-position = Vector2(-650, 0)
-shape = SubResource("RectangleShape2D_72mcj")
-
-[node name="WallRight" type="CollisionShape2D" parent="Boundary" unique_id=1835714092]
-position = Vector2(650, 0)
-shape = SubResource("RectangleShape2D_72mcj")

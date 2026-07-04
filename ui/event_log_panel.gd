@@ -60,6 +60,14 @@ func _build_ui() -> void:
 	debug_btn.add_theme_color_override("font_color", Color(0.45, 0.90, 0.45))
 	debug_btn.pressed.connect(_on_debug_button_pressed)
 	header_row.add_child(debug_btn)
+	
+	var spawn_btn := Button.new()
+	spawn_btn.text = "＋ Criatura"
+	spawn_btn.flat = true
+	spawn_btn.add_theme_font_size_override("font_size", 10)
+	spawn_btn.add_theme_color_override("font_color", Color(0.65, 0.85, 1.0))
+	spawn_btn.pressed.connect(_on_spawn_button_pressed)
+	header_row.add_child(spawn_btn)
 
 	root.add_child(header_row)   # ← en vez de root.add_child(title)
 
@@ -106,3 +114,16 @@ func _on_debug_button_pressed() -> void:
 		get_parent().add_child(_debug_panel)
 	else:
 		_debug_panel.visible = not _debug_panel.visible
+
+# — Añadir variable y método:
+
+var _spawn_panel: SpawnPanel = null
+
+
+func _on_spawn_button_pressed() -> void:
+	if _spawn_panel == null:
+		_spawn_panel = SpawnPanel.new()
+		_spawn_panel.agent_scene = load("res://base_agent_template.tscn") # Hardcodeado
+		_spawn_panel.position = Vector2(350.0, 50.0)
+		get_parent().add_child(_spawn_panel)
+	_spawn_panel.visible = not _spawn_panel.visible

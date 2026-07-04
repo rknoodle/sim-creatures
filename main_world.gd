@@ -6,8 +6,10 @@ extends Node2D
 
 
 func _ready() -> void:
+	add_to_group("world")
 	_connect_agent_signals(agent_m)
 	_connect_agent_signals(agent_f)
+
 	await get_tree().process_frame
 	var cameras: Array[Node] = get_tree().get_nodes_in_group("main_camera")
 	if not cameras.is_empty():
@@ -19,19 +21,16 @@ func _connect_agent_signals(agent: BaseAgent) -> void:
 	agent.chemical_normalized.connect(_on_chemical_normalized.bind(agent))
 
 
+func on_mating_ready(parent_a: BaseAgent, parent_b: BaseAgent) -> void:
+	print("[Apareamiento confirmado] %s + %s — listo para genética" % [
+		parent_a.identity.creature_name,
+		parent_b.identity.creature_name
+	])
+
+
 func _on_agent_hunger_critical(level: float, agent: BaseAgent) -> void:
 	print("¡HAMBRE CRÍTICA! %s — Nivel: %.1f" % [agent.identity.creature_name, level])
 
 
 func _on_chemical_normalized(chem_name: StringName, agent: BaseAgent) -> void:
 	print("Químico normalizado en %s: %s" % [agent.identity.creature_name, chem_name])
-	
-func _enter_tree() -> void:
-	add_to_group("world")
-
-
-func on_mating_ready(parent_a: BaseAgent, parent_b: BaseAgent) -> void:
-	print("[Apareamiento confirmado] %s + %s — listo para genética (módulo futuro)" % [
-		parent_a.identity.creature_name,
-		parent_b.identity.creature_name
-	])
