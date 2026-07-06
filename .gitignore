@@ -18,3 +18,7 @@ mono_crash.*.json
 # Local resource folders
 /_resources/
 /_sprites/
+
+# Ignorar todas las imágenes y archivos .import dentro de la carpeta portrait
+/assets/portrait/**/*.png
+/assets/portrait/**/*.import

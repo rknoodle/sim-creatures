@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://4b2s3jio05em"]
+
+[ext_resource type="Script" uid="uid://dtxhpthwyxqkl" path="res://ui/portrait/portrait_viewport.gd" id="1_mbtsx"]
+[ext_resource type="Script" uid="uid://b5mtg76a6a8je" path="res://ui/portrait/portrait_renderer.gd" id="2_52yn1"]
+
+[node name="PortraitViewport" type="SubViewport" unique_id=533207345]
+script = ExtResource("1_mbtsx")
+
+[node name="PortraitRenderer" type="Node2D" parent="." unique_id=971374614]
+script = ExtResource("2_52yn1")

@@ -40,6 +40,7 @@ var _agent_header_label: Label
 
 var _dragging: bool = false
 var _drag_offset: Vector2 = Vector2.ZERO
+var _portrait_editor: PortraitEditor = null
 
 
 func _ready() -> void:
@@ -145,6 +146,7 @@ func _build_ui() -> void:
 	root.add_child(_build_section("chem_vals",  "🧪 Niveles químicos",  _build_chem_values_content()))
 	root.add_child(_build_section("chem_rates", "⏱ Tasas químicas",    _build_chem_rates_content()))
 	root.add_child(_build_section("brain",      "🧠 Cerebro (pesos)",   _build_brain_content()))
+	root.add_child(_build_section("portrait", "🎨 Retrato", _build_portrait_editor_content()))
 
 	root.add_child(_build_separator())
 	root.add_child(_build_quick_actions())
@@ -527,6 +529,12 @@ func _on_creature_selected(creature: BaseAgent) -> void:
 	_agent_header_label.text = "Editando: %s" % creature.identity.creature_name
 	_populate_sliders_from_agent()
 
+	if _portrait_editor != null:
+		# Crear PortraitData si el agente no tiene uno todavía
+		if creature.identity.portrait == null:
+			creature.identity.portrait = PortraitData.new()
+		_portrait_editor.load_portrait(creature.identity.portrait)
+	
 
 func _on_creature_deselected() -> void:
 	_selected_agent = null
@@ -549,3 +557,21 @@ func _on_brain_reset_pressed() -> void:
 	_selected_agent.brain.weights = fresh.weights.duplicate(true)
 	_populate_sliders_from_agent()
 	EventLog.push("[Debug] Cerebro de %s reseteado" % _selected_agent.identity.creature_name)
+
+func _build_portrait_editor_content() -> VBoxContainer:
+	var vbox := VBoxContainer.new()
+	_portrait_editor = PortraitEditor.new()
+	_portrait_editor.portrait_changed.connect(_on_portrait_changed)
+	vbox.add_child(_portrait_editor)
+	return vbox
+
+
+func _on_portrait_changed(data: PortraitData) -> void:
+	if _selected_agent == null:
+		return
+	_selected_agent.identity.portrait = data
+	# Actualizar el AgentPortrait del agente en el mundo
+	var portrait_component: AgentPortrait = \
+		_selected_agent.get_node_or_null("AgentPortrait")
+	if portrait_component != null:
+		portrait_component.apply(data)

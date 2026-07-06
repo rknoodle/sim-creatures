@@ -10,6 +10,7 @@ enum Gender { MALE, FEMALE }
 @export var sprite_texture: Texture2D = null
 @export var body_scale: float = 1.0
 @export_range(0.5, 3.0, 0.05) var body_scale_range: float = 1.0
+@export var portrait: PortraitData = null
 
 # ─── Identidad ────────────────────────────────────────────────────────────────
 @export_group("Identidad")

@@ -91,6 +91,9 @@ func _build_ui() -> void:
 	root.add_child(_build_chemicals_section())
 	root.add_child(_build_separator())
 	root.add_child(_build_spawn_button())
+	
+	var portrait_section := _build_portrait_section()
+	root.add_child(portrait_section)
 
 	_status_label = Label.new()
 	_status_label.text = ""
@@ -387,6 +390,7 @@ func _on_spawn_pressed() -> void:
 		randf_range(spawn_area_min.y, spawn_area_max.y)
 	)
 
+	id.portrait = _portrait_editor.get_portrait_data().duplicate_portrait()
 	get_tree().current_scene.add_child(new_agent)
 
 	# Aplicar valores químicos iniciales tras añadir al árbol
@@ -406,3 +410,30 @@ func _show_status(text: String, success: bool) -> void:
 	_status_label.add_theme_color_override("font_color",
 		Color(0.55, 0.80, 0.55) if success else Color(0.85, 0.45, 0.45)
 	)
+
+var _portrait_editor: PortraitEditor = null
+
+
+func _build_portrait_section() -> VBoxContainer:
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 5)
+
+	var toggle_btn := Button.new()
+	toggle_btn.text = "▸ 🎨 Retrato"
+	toggle_btn.flat = true
+	toggle_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	toggle_btn.add_theme_font_size_override("font_size", 11)
+	toggle_btn.add_theme_color_override("font_color", Color(0.75, 0.65, 0.90))
+	vbox.add_child(toggle_btn)
+
+	_portrait_editor = PortraitEditor.new()
+	_portrait_editor.visible = false
+	_portrait_editor.load_portrait(PortraitData.new())
+	vbox.add_child(_portrait_editor)
+
+	toggle_btn.pressed.connect(func() -> void:
+		_portrait_editor.visible = not _portrait_editor.visible
+		toggle_btn.text = ("▾ " if _portrait_editor.visible else "▸ ") + "🎨 Retrato"
+	)
+
+	return vbox

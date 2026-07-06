@@ -61,3 +61,12 @@ func _draw() -> void:
 	n.set("radius", indicator_radius)
 	n.set("color", indicator_color)
 	return n
+
+## Actualiza el radio del colisionador de selección.
+func update_radius(new_radius: float) -> void:
+	indicator_radius = new_radius
+	var col := get_child(0) as CollisionShape2D
+	if col != null and col.shape is CircleShape2D:
+		(col.shape as CircleShape2D).radius = new_radius
+	if _indicator != null:
+		_indicator.set("radius", new_radius)
