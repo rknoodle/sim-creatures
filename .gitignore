@@ -22,3 +22,6 @@ mono_crash.*.json
 # Ignorar todas las imágenes y archivos .import dentro de la carpeta portrait
 /assets/portrait/**/*.png
 /assets/portrait/**/*.import
+
+# Asegurar que Git no ignore los archivos .gitkeep que usarás para salvar las carpetas
+!/assets/portrait/**/.gitkeep
