@@ -560,11 +560,72 @@ func _on_brain_reset_pressed() -> void:
 
 func _build_portrait_editor_content() -> VBoxContainer:
 	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 6)
+
 	_portrait_editor = PortraitEditor.new()
 	_portrait_editor.portrait_changed.connect(_on_portrait_changed)
 	vbox.add_child(_portrait_editor)
+
+	var save_btn := Button.new()
+	save_btn.text = "💾 Guardar retrato como .tres"
+	save_btn.pressed.connect(_on_save_portrait_pressed)
+	vbox.add_child(save_btn)
+
+	var load_btn := Button.new()
+	load_btn.text = "📂 Cargar retrato desde .tres"
+	load_btn.pressed.connect(_on_load_portrait_pressed)
+	vbox.add_child(load_btn)
+
 	return vbox
 
+func _on_save_portrait_pressed() -> void:
+	if _selected_agent == null or _selected_agent.identity.portrait == null:
+		return
+	var dialog := FileDialog.new()
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.access   = FileDialog.ACCESS_RESOURCES
+	dialog.filters  = PackedStringArray(["*.tres ; Resource"])
+	dialog.current_file = "%s_portrait.tres" % \
+		_selected_agent.identity.creature_name.to_lower()
+	dialog.file_selected.connect(func(path: String) -> void:
+		var err: Error = ResourceSaver.save(
+			_selected_agent.identity.portrait, path
+		)
+		if err == OK:
+			EventLog.push("Retrato guardado en %s" % path)
+		else:
+			EventLog.push("Error al guardar retrato")
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(func() -> void: dialog.queue_free())
+	get_tree().current_scene.add_child(dialog)
+	dialog.popup_centered(Vector2(700, 500))
+
+func _on_load_portrait_pressed() -> void:
+	if _selected_agent == null:
+		return
+	var dialog := FileDialog.new()
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.access   = FileDialog.ACCESS_RESOURCES
+	dialog.filters  = PackedStringArray(["*.tres ; Resource"])
+	dialog.file_selected.connect(func(path: String) -> void:
+		var loaded: PortraitData = load(path) as PortraitData
+		if loaded == null:
+			EventLog.push("Error: el archivo no es un PortraitData")
+			dialog.queue_free()
+			return
+		_selected_agent.identity.portrait = loaded
+		_portrait_editor.load_portrait(loaded)
+		var portrait_component: AgentPortrait = \
+			_selected_agent.get_node_or_null("AgentPortrait") as AgentPortrait
+		if portrait_component != null:
+			portrait_component.apply(loaded)
+		EventLog.push("Retrato cargado desde %s" % path)
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(func() -> void: dialog.queue_free())
+	get_tree().current_scene.add_child(dialog)
+	dialog.popup_centered(Vector2(700, 500))
 
 func _on_portrait_changed(data: PortraitData) -> void:
 	if _selected_agent == null:

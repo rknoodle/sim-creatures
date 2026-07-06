@@ -8,9 +8,11 @@
 [ext_resource type="Resource" uid="uid://ctoo0ht43sd2e" path="res://_resources/agent_01_brain.tres" id="4_xftef"]
 [ext_resource type="Script" uid="uid://bhi3un8cave3" path="res://resources/identity_data.gd" id="6_72mcj"]
 [ext_resource type="Texture2D" uid="uid://bddxkbr4d3ncl" path="res://_sprites/kri.png" id="6_fc1ei"]
+[ext_resource type="Resource" uid="uid://dtvni4cs0r1y0" path="res://_resources/kri_portrait.tres" id="8_vikx7"]
 [ext_resource type="Texture2D" uid="uid://bf8jnrku54tdd" path="res://_sprites/noe.png" id="9_vo8r4"]
 [ext_resource type="Resource" uid="uid://3j5kq8sv6vsi" path="res://resources/interaction_food.tres" id="10_8i6ae"]
 [ext_resource type="Script" uid="uid://daa1hjaexumy4" path="res://objects/smart_object.gd" id="10_v7yd6"]
+[ext_resource type="Resource" uid="uid://dusskuvsu84di" path="res://_resources/noe_portrait.tres" id="11_ffw8n"]
 [ext_resource type="Resource" uid="uid://danc0tr6j5rh3" path="res://resources/interaction_sleep.tres" id="11_v7yd6"]
 [ext_resource type="Texture2D" uid="uid://23sxaa02jq3c" path="res://_sprites/bread.png" id="11_wly0c"]
 [ext_resource type="Texture2D" uid="uid://1qg8lvnd13pd" path="res://_sprites/bed.png" id="13_xftef"]
@@ -32,6 +34,7 @@ outlines = Array[PackedVector2Array]([PackedVector2Array(-561, -313, -568, 303, 
 script = ExtResource("6_72mcj")
 sprite_texture = ExtResource("6_fc1ei")
 body_scale = 0.8
+portrait = ExtResource("8_vikx7")
 creature_name = "Kri"
 start_age = 60.0
 metadata/_custom_type_script = "uid://bhi3un8cave3"
@@ -39,8 +42,9 @@ metadata/_custom_type_script = "uid://bhi3un8cave3"
 [sub_resource type="Resource" id="Resource_vo8r4"]
 script = ExtResource("6_72mcj")
 sprite_texture = ExtResource("9_vo8r4")
-body_scale = 1.3
-body_scale_range = 1.3
+body_scale = 2.0
+body_scale_range = 2.0
+portrait = ExtResource("11_ffw8n")
 creature_name = "Noe"
 gender = 1
 species = "Deer"
